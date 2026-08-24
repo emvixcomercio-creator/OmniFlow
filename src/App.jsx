@@ -10,8 +10,8 @@ import { useApp } from './store/AppContext'
 export default function App() {
   const { state, isSupervisor } = useApp()
 
-  if (!state.authed) return <LoginPage />
   if (!state.entryMode) return <WelcomeChoice />
+  if (!state.authed) return <LoginPage />
 
   const page = () => {
     if (state.view === 'supervisor' && isSupervisor) return <SupervisorPage />

@@ -40,7 +40,7 @@ export default function SupervisorPage() {
             </p>
           </div>
           <span className={`chip px-3 py-1.5 ${state.simulation ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-600'}`}>
-            <Activity size={13} /> {state.simulation ? 'Dados ao vivo' : 'Simulação pausada'}
+            <Activity size={13} /> {state.simulation ? 'Dados ao vivo' : 'Tela estável'}
           </span>
         </header>
 

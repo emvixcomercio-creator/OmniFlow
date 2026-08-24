@@ -1,6 +1,8 @@
 import React from 'react'
 import { Inbox, LayoutDashboard, Users, Settings, Zap, ZapOff, ChevronDown, Compass, LogOut } from 'lucide-react'
-import GuidedTour from '../tour/GuidedTour'
+import Apresentacao from '../tour/Apresentacao'
+import { PARADAS_FLUXO } from '../tour/paradasFluxo'
+import { PARADAS_PRIMEIRO_DIA } from '../tour/paradas'
 import { useApp } from '../../store/AppContext'
 import Avatar from '../common/Avatar'
 import { TICKET_STATUS } from '../../lib/constants'
@@ -28,11 +30,13 @@ function NavButton({ active, icon: Icon, label, badge, onClick, disabled }) {
 
 export default function AppShell({ children }) {
   const { state, dispatch, isSupervisor } = useApp()
-  // quem escolheu "Ver a apresentação" na entrada já começa com o guia aberto
-  const [tourOpen, setTourOpen] = React.useState(state.entryMode === 'apresentacao')
-
-  const startTour = () => setTourOpen(true)
-  const closeTour = () => setTourOpen(false)
+  // a apresentação abre sozinha em quem escolheu um dos modos guiados
+  const [guia, setGuia] = React.useState(
+    state.entryMode === 'apresentacao' ? 'fluxo'
+      : state.entryMode === 'primeiro-dia' ? 'primeiro-dia'
+      : null,
+  )
+  const paradas = guia === 'primeiro-dia' ? PARADAS_PRIMEIRO_DIA : PARADAS_FLUXO
 
   const pending = state.tickets.filter(
     (t) => t.status === TICKET_STATUS.WAITING || t.status === TICKET_STATUS.BOT,
@@ -84,8 +88,8 @@ export default function AppShell({ children }) {
         </button>
 
         <button
-          onClick={startTour}
-          title="Rever a apresentação guiada"
+          onClick={() => setGuia(guia ? null : 'fluxo')}
+          title="Ver a apresentação guiada"
           className="w-[52px] py-2 rounded-xl flex flex-col items-center gap-0.5 text-[9px] font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
         >
           <Compass size={16} />
@@ -99,13 +103,9 @@ export default function AppShell({ children }) {
         <UserSwitcher />
       </nav>
 
-      <main className="flex-1 min-w-0 flex flex-col">{children}</main>
+      <main className={`flex-1 min-w-0 flex flex-col ${guia ? 'pb-[96px]' : ''}`}>{children}</main>
 
-      <GuidedTour
-        open={tourOpen}
-        onClose={closeTour}
-        onFinish={() => window.dispatchEvent(new CustomEvent('omniflow:open-channel-setup'))}
-      />
+      {guia && <Apresentacao paradas={paradas} onSair={() => setGuia(null)} />}
     </div>
   )
 }

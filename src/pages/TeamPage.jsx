@@ -41,6 +41,11 @@ export default function TeamPage() {
             <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-1.5">
               <Building2 size={15} className="text-slate-400" /> Departamentos
             </h3>
+            {state.departments.length === 0 && (
+              <p className="text-sm text-slate-400 py-6 text-center">
+                Nenhum setor criado ainda.
+              </p>
+            )}
             <div className="space-y-2">
               {state.departments.map((d) => {
                 const team = state.users.filter((u) => u.departmentIds.includes(d.id))
@@ -80,6 +85,11 @@ export default function TeamPage() {
                 <Pencil size={13} /> Editar
               </button>
             </div>
+            {activeOptions(state.botConfig).length === 0 && (
+              <p className="text-sm text-slate-400 py-6 text-center">
+                O robô ainda não tem perguntas configuradas.
+              </p>
+            )}
             <div className="space-y-1.5">
               {activeOptions(state.botConfig).map((o) => {
                 const dep = state.departments.find((d) => d.id === o.departmentId)
@@ -94,13 +104,19 @@ export default function TeamPage() {
                 )
               })}
             </div>
-            <p className="text-[11px] text-slate-400 mt-3">
+            {activeOptions(state.botConfig).length > 0 && (
+              <p className="text-[11px] text-slate-400 mt-3">
               {state.botConfig.keywordsEnabled
                 ? 'Respostas fora do menu passam por palavras-chave antes de o bot repetir as opções.'
                 : 'O bot aceita apenas o número da opção.'}{' '}
-              Depois de {state.botConfig.maxAttempts} tentativas erradas, o chamado vai para{' '}
-              {state.departments.find((d) => d.id === state.botConfig.fallbackDepartmentId)?.name}.
+              {state.departments.length > 0 && (
+                <>
+                  Depois de {state.botConfig.maxAttempts} tentativas erradas, o chamado vai para{' '}
+                  {state.departments.find((d) => d.id === state.botConfig.fallbackDepartmentId)?.name}.
+                </>
+              )}
             </p>
+            )}
           </section>
 
           {/* Canais */}
@@ -108,6 +124,11 @@ export default function TeamPage() {
             <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-1.5">
               <Plug size={15} className="text-slate-400" /> Canais conectados
             </h3>
+            {state.channels.length === 0 && (
+              <p className="text-sm text-slate-400 py-6 text-center">
+                Nenhum canal conectado ainda.
+              </p>
+            )}
             <div className="space-y-2">
               {state.channels.map((c) => (
                 <div key={c.id} className="flex items-center gap-3 rounded-lg border border-slate-200 px-3 py-2.5">

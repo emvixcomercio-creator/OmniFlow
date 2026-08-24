@@ -34,10 +34,23 @@ const userName = (state, id) => state.users.find((u) => u.id === id)?.name || 'S
 export function reducer(state, action) {
   switch (action.type) {
     case 'LOGIN':
-      return { ...state, authed: true, currentUserId: action.userId, view: 'inbox', entryMode: null }
+      return { ...state, authed: true, currentUserId: action.userId, view: 'inbox', entryMode: 'sistema' }
 
-    case 'SET_ENTRY_MODE':
-      return { ...state, entryMode: action.mode }
+    /* A apresentação monta o sistema do zero: cada parada acrescenta uma peça. */
+    case 'SET_DEMO_STATE':
+      return { ...state, ...action.patch }
+
+    case 'SET_ENTRY_MODE': {
+      // escolher um modo já entra no sistema — o login vira opcional
+      if (action.mode === 'login') return { ...state, entryMode: 'login', authed: false }
+      return {
+        ...state,
+        entryMode: action.mode,
+        authed: true,
+        currentUserId: action.userId || 'u-ana',
+        view: 'inbox',
+      }
+    }
 
     case 'LOGOUT':
       return { ...state, authed: false, entryMode: null, spyTicketId: null, simulation: false }
