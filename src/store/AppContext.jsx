@@ -24,7 +24,8 @@ const initialState = {
   spyTicketId: null,
   filters: { ...DEFAULT_FILTERS },
   botConfig: DEFAULT_BOT_CONFIG,
-  simulation: true,
+  simulation: false,   // nada se move sozinho até alguém ligar
+  entryMode: null,     // 'apresentacao' | 'sistema'
 }
 
 export function AppProvider({ children }) {

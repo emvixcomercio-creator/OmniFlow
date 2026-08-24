@@ -34,10 +34,13 @@ const userName = (state, id) => state.users.find((u) => u.id === id)?.name || 'S
 export function reducer(state, action) {
   switch (action.type) {
     case 'LOGIN':
-      return { ...state, authed: true, currentUserId: action.userId, view: 'inbox' }
+      return { ...state, authed: true, currentUserId: action.userId, view: 'inbox', entryMode: null }
+
+    case 'SET_ENTRY_MODE':
+      return { ...state, entryMode: action.mode }
 
     case 'LOGOUT':
-      return { ...state, authed: false, spyTicketId: null }
+      return { ...state, authed: false, entryMode: null, spyTicketId: null, simulation: false }
 
     case 'UPDATE_BOT_CONFIG':
       return { ...state, botConfig: { ...state.botConfig, ...action.config } }

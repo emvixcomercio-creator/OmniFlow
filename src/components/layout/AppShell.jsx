@@ -1,7 +1,6 @@
 import React from 'react'
 import { Inbox, LayoutDashboard, Users, Settings, Zap, ZapOff, ChevronDown, Compass, LogOut } from 'lucide-react'
 import GuidedTour from '../tour/GuidedTour'
-import TourInvite from '../tour/TourInvite'
 import { useApp } from '../../store/AppContext'
 import Avatar from '../common/Avatar'
 import { TICKET_STATUS } from '../../lib/constants'
@@ -29,19 +28,11 @@ function NavButton({ active, icon: Icon, label, badge, onClick, disabled }) {
 
 export default function AppShell({ children }) {
   const { state, dispatch, isSupervisor } = useApp()
-  // o tour nunca abre sozinho: ele bloqueia a tela e atrapalha quem só quer usar
-  const [tourOpen, setTourOpen] = React.useState(false)
-  const [invite, setInvite] = React.useState(() => {
-    try { return localStorage.getItem('omniflow.tour.seen') !== '1' } catch { return true }
-  })
+  // quem escolheu "Ver a apresentação" na entrada já começa com o guia aberto
+  const [tourOpen, setTourOpen] = React.useState(state.entryMode === 'apresentacao')
 
-  const markSeen = () => {
-    try { localStorage.setItem('omniflow.tour.seen', '1') } catch { /* modo privado */ }
-  }
-
-  const startTour = () => { setInvite(false); markSeen(); setTourOpen(true) }
-  const closeTour = () => { setTourOpen(false); markSeen() }
-  const dismissInvite = () => { setInvite(false); markSeen() }
+  const startTour = () => setTourOpen(true)
+  const closeTour = () => setTourOpen(false)
 
   const pending = state.tickets.filter(
     (t) => t.status === TICKET_STATUS.WAITING || t.status === TICKET_STATUS.BOT,
@@ -81,7 +72,7 @@ export default function AppShell({ children }) {
 
         <button
           onClick={() => dispatch({ type: 'TOGGLE_SIMULATION' })}
-          title={state.simulation ? 'Pausar simulação em tempo real' : 'Retomar simulação'}
+          title={state.simulation ? 'Parar o movimento — a tela fica estável' : 'Ligar o movimento: mensagens novas chegando em tempo real'}
           className={`w-[52px] py-2 rounded-xl flex flex-col items-center gap-0.5 text-[9px] font-semibold transition-colors ${
             state.simulation
               ? 'bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25'
@@ -89,16 +80,16 @@ export default function AppShell({ children }) {
           }`}
         >
           {state.simulation ? <Zap size={16} /> : <ZapOff size={16} />}
-          {state.simulation ? 'AO VIVO' : 'PAUSADO'}
+          {state.simulation ? 'AO VIVO' : 'PARADO'}
         </button>
 
         <button
           onClick={startTour}
-          title="Como funciona (tour guiado)"
+          title="Rever a apresentação guiada"
           className="w-[52px] py-2 rounded-xl flex flex-col items-center gap-0.5 text-[9px] font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
         >
           <Compass size={16} />
-          TOUR
+          GUIA
         </button>
 
         <button className="w-full flex flex-col items-center gap-1 py-2 text-slate-500 hover:text-white">
@@ -109,8 +100,6 @@ export default function AppShell({ children }) {
       </nav>
 
       <main className="flex-1 min-w-0 flex flex-col">{children}</main>
-
-      {invite && !tourOpen && <TourInvite onStart={startTour} onDismiss={dismissInvite} />}
 
       <GuidedTour
         open={tourOpen}

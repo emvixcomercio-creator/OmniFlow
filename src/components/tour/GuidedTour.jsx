@@ -4,10 +4,10 @@ import { useApp } from '../../store/AppContext'
 import { TOUR_STEPS } from './tourSteps'
 
 const PAD = 8
-const CARD_W = 350
+const CARD_W = 400
 
 /** Recorta o elemento-alvo com quatro painéis escuros (o buraco continua clicável). */
-function Scrim({ rect, onClick }) {
+function Scrim({ rect }) {
   const panels = rect
     ? [
         { top: 0, left: 0, width: '100%', height: Math.max(0, rect.top - PAD) },
@@ -20,7 +20,7 @@ function Scrim({ rect, onClick }) {
   return (
     <>
       {panels.map((style, i) => (
-        <div key={i} onClick={onClick} className="fixed bg-slate-900/70 z-[60]" style={style} />
+        <div key={i} className="fixed bg-slate-900/50 z-[60] pointer-events-none" style={style} />
       ))}
       {rect && (
         <div
@@ -133,12 +133,12 @@ export default function GuidedTour({ open, onClose, onFinish }) {
 
   return (
     <>
-      <Scrim rect={rect} onClick={finish} />
+      <Scrim rect={rect} />
 
       <div
         role="dialog"
         aria-label={step.title}
-        className="fixed z-[62] card shadow-2xl p-4 animate-pop-in"
+        className="fixed z-[62] card shadow-2xl p-5 animate-pop-in"
         style={cardStyle(rect, step.place)}
       >
         <div className="flex items-center gap-2 mb-1.5">
@@ -151,10 +151,10 @@ export default function GuidedTour({ open, onClose, onFinish }) {
           </button>
         </div>
 
-        <h3 className="font-semibold text-slate-800 leading-snug">{step.title}</h3>
-        <p className="text-sm text-slate-600 mt-1.5 leading-relaxed">{step.body}</p>
-        <p className="text-[11px] text-slate-400 mt-2">
-          Clique fora ou tecle Esc para sair e usar o sistema livremente.
+        <h3 className="text-[17px] font-semibold text-slate-800 leading-snug">{step.title}</h3>
+        <p className="text-[14px] text-slate-600 mt-2 leading-[1.65]">{step.body}</p>
+        <p className="text-[11px] text-slate-400 mt-2.5">
+          Pode clicar na tela normalmente enquanto lê — nada fica travado.
         </p>
 
         <div className="flex items-center gap-2 mt-4">

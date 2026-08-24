@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { MessagesSquare, Bot, UserPlus, CheckCircle2, Star } from 'lucide-react'
+import { MessagesSquare, Bot, UserPlus, CheckCircle2, Star, Headphones } from 'lucide-react'
 import { useApp } from '../store/AppContext'
 import ConversationList from '../components/inbox/ConversationList'
 import ChatHeader from '../components/inbox/ChatHeader'
@@ -12,7 +12,10 @@ import { TICKET_STATUS } from '../lib/constants'
 
 /** Rodapé alternativo quando o atendente ainda não pode digitar. */
 function ComposerLock({ ticket }) {
-  const { dispatch, currentUser } = useApp()
+  const { dispatch, currentUser, getUser } = useApp()
+  const owner = ticket.assigneeId && ticket.assigneeId !== currentUser.id
+    ? getUser(ticket.assigneeId)
+    : null
 
   if (ticket.status === TICKET_STATUS.BOT) {
     return (
@@ -61,19 +64,42 @@ function ComposerLock({ ticket }) {
     )
   }
 
-  // WAITING sem responsável
+  // já está com outra pessoa da equipe
+  if (owner) {
+    return (
+      <div className="border-t border-slate-200 bg-slate-50 px-4 py-4 flex items-center gap-3">
+        <Headphones size={20} className="text-slate-500 shrink-0" />
+        <div className="flex-1">
+          <p className="text-sm font-medium text-slate-700">
+            Esta conversa está com {owner.name}
+          </p>
+          <p className="text-xs text-slate-500">
+            Você pode acompanhar sem interferir. Para responder ao cliente, é preciso assumir.
+          </p>
+        </div>
+        <button
+          onClick={() => dispatch({ type: 'ASSIGN', ticketId: ticket.id, agentId: currentUser.id })}
+          className="btn-outline py-2 text-xs shrink-0"
+        >
+          <UserPlus size={14} /> Assumir para mim
+        </button>
+      </div>
+    )
+  }
+
+  // esperando na fila, sem ninguém responsável
   return (
     <div className="border-t border-amber-200 bg-amber-50 px-4 py-4 flex items-center gap-3">
       <MessagesSquare size={20} className="text-amber-600 shrink-0" />
       <div className="flex-1">
-        <p className="text-sm font-medium text-amber-800">Chamado aguardando na fila</p>
-        <p className="text-xs text-amber-600">Assuma o atendimento para poder responder o cliente.</p>
+        <p className="text-sm font-medium text-amber-800">Ninguém atendendo ainda</p>
+        <p className="text-xs text-amber-600">O cliente está esperando na fila do setor.</p>
       </div>
       <button
         onClick={() => dispatch({ type: 'ASSIGN', ticketId: ticket.id, agentId: currentUser.id })}
         className="btn-primary py-2 text-xs shrink-0"
       >
-        <UserPlus size={14} /> Assumir atendimento
+        <UserPlus size={14} /> Atender agora
       </button>
     </div>
   )
