@@ -4,10 +4,13 @@ Plataforma de atendimento unificado (WhatsApp, Instagram e Chat do Site) para
 escritórios e empresas: inbox único, filas por departamento, bot de triagem e
 painel de supervisão em tempo real.
 
+**Demonstração no ar:** https://emvixcomercio-creator.github.io/OmniFlow/
+
 ```
 npm install
 npm run dev        # interface em http://localhost:5173 (dados mockados, já operável)
 npm run server     # API + webhooks em http://localhost:3333 (requer PostgreSQL)
+npm run deploy     # publica o build no GitHub Pages
 ```
 
 O front funciona **sem banco e sem back-end**: os dados são mockados e um
