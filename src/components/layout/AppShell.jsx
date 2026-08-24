@@ -1,6 +1,7 @@
 import React from 'react'
 import { Inbox, LayoutDashboard, Users, Settings, Zap, ZapOff, ChevronDown, Compass, LogOut } from 'lucide-react'
 import GuidedTour from '../tour/GuidedTour'
+import TourInvite from '../tour/TourInvite'
 import { useApp } from '../../store/AppContext'
 import Avatar from '../common/Avatar'
 import { TICKET_STATUS } from '../../lib/constants'
@@ -28,14 +29,19 @@ function NavButton({ active, icon: Icon, label, badge, onClick, disabled }) {
 
 export default function AppShell({ children }) {
   const { state, dispatch, isSupervisor } = useApp()
-  const [tourOpen, setTourOpen] = React.useState(() => {
+  // o tour nunca abre sozinho: ele bloqueia a tela e atrapalha quem só quer usar
+  const [tourOpen, setTourOpen] = React.useState(false)
+  const [invite, setInvite] = React.useState(() => {
     try { return localStorage.getItem('omniflow.tour.seen') !== '1' } catch { return true }
   })
 
-  const closeTour = () => {
-    setTourOpen(false)
+  const markSeen = () => {
     try { localStorage.setItem('omniflow.tour.seen', '1') } catch { /* modo privado */ }
   }
+
+  const startTour = () => { setInvite(false); markSeen(); setTourOpen(true) }
+  const closeTour = () => { setTourOpen(false); markSeen() }
+  const dismissInvite = () => { setInvite(false); markSeen() }
 
   const pending = state.tickets.filter(
     (t) => t.status === TICKET_STATUS.WAITING || t.status === TICKET_STATUS.BOT,
@@ -87,7 +93,7 @@ export default function AppShell({ children }) {
         </button>
 
         <button
-          onClick={() => setTourOpen(true)}
+          onClick={startTour}
           title="Como funciona (tour guiado)"
           className="w-[52px] py-2 rounded-xl flex flex-col items-center gap-0.5 text-[9px] font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
         >
@@ -103,6 +109,8 @@ export default function AppShell({ children }) {
       </nav>
 
       <main className="flex-1 min-w-0 flex flex-col">{children}</main>
+
+      {invite && !tourOpen && <TourInvite onStart={startTour} onDismiss={dismissInvite} />}
 
       <GuidedTour
         open={tourOpen}

@@ -133,7 +133,7 @@ export default function GuidedTour({ open, onClose, onFinish }) {
 
   return (
     <>
-      <Scrim rect={rect} onClick={() => {}} />
+      <Scrim rect={rect} onClick={finish} />
 
       <div
         role="dialog"
@@ -153,6 +153,9 @@ export default function GuidedTour({ open, onClose, onFinish }) {
 
         <h3 className="font-semibold text-slate-800 leading-snug">{step.title}</h3>
         <p className="text-sm text-slate-600 mt-1.5 leading-relaxed">{step.body}</p>
+        <p className="text-[11px] text-slate-400 mt-2">
+          Clique fora ou tecle Esc para sair e usar o sistema livremente.
+        </p>
 
         <div className="flex items-center gap-2 mt-4">
           <div className="flex gap-1 flex-1">
@@ -167,6 +170,10 @@ export default function GuidedTour({ open, onClose, onFinish }) {
               />
             ))}
           </div>
+
+          <button onClick={finish} className="btn-ghost py-1.5 px-2 text-xs text-slate-500">
+            Sair
+          </button>
 
           {index > 0 && (
             <button onClick={() => setIndex(index - 1)} className="btn-ghost py-1.5 px-2 text-xs">

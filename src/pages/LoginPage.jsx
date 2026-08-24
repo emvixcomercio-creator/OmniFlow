@@ -16,8 +16,8 @@ const HIGHLIGHTS = [
 
 export default function LoginPage() {
   const { state, dispatch } = useApp()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('marina@andradegomes.com.br')
+  const [password, setPassword] = useState(DEMO_PASSWORD)
   const [show, setShow] = useState(false)
   const [error, setError] = useState(null)
   const [busy, setBusy] = useState(false)
@@ -152,8 +152,8 @@ export default function LoginPage() {
 
           {/* atalhos da demonstração */}
           <div className="mt-7 pt-5 border-t border-slate-200">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 mb-2.5">
-              Entrar direto na demonstração
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-brand-600 mb-2.5">
+              ↓ Um clique para entrar na demonstração
             </p>
             <div className="space-y-2">
               {shortcuts.map((u) => (
@@ -163,17 +163,19 @@ export default function LoginPage() {
                 >
                   <Avatar name={u.name} color={u.avatarColor} size="sm" presence={u.status} />
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-slate-800 truncate">{u.name}</p>
-                    <p className="text-[11px] text-slate-500">
-                      {u.role === 'AGENT' ? 'Atendente — vê apenas o inbox' : 'Supervisora — vê o painel do gestor'}
+                    <p className="text-sm font-medium text-slate-800 truncate">
+                      {u.name}
+                      <span className="font-normal text-slate-400"> · {u.role === 'AGENT' ? 'atendente' : 'supervisora'}</span>
                     </p>
+                    <p className="text-[11px] text-slate-500 font-mono truncate">{u.email}</p>
                   </div>
                   <ArrowRight size={15} className="text-slate-300 group-hover:text-brand-600 shrink-0" />
                 </button>
               ))}
             </div>
-            <p className="text-[11px] text-slate-400 mt-2.5">
-              Qualquer e-mail da equipe funciona com a senha <code className="font-mono">123456</code>.
+            <p className="text-xs text-slate-600 mt-3 rounded-lg bg-slate-100 border border-slate-200 px-3 py-2">
+              Prefere digitar? Use qualquer e-mail acima com a senha{' '}
+              <strong className="font-mono text-slate-800">123456</strong>.
             </p>
           </div>
         </div>
