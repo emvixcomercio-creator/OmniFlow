@@ -29,6 +29,21 @@ com a senha `123456`. A sessão fica no navegador (`omniflow.session`) e o botã
 > A senha do seed é um SHA-256 simples, adequado só para demonstração.
 > Troque por bcrypt ou argon2 e emita um JWT antes de qualquer uso real.
 
+## 0b. Duas portas de entrada
+
+Depois de entrar, a pessoa escolhe (`src/pages/WelcomeChoice.jsx`):
+
+- **Ver a apresentação** — abre o guia passo a passo (11 paradas) explicando o
+  caminho de um atendimento em linguagem simples. O guia destaca a parte da tela
+  que está sendo explicada, mas **não bloqueia os cliques**: dá para mexer no
+  sistema enquanto lê. Sai com Esc ou no botão Sair.
+- **Entrar no sistema** — nada por cima da tela, uso livre.
+
+**Nada se move sozinho.** A simulação de tempo real começa desligada; o botão
+na barra lateral (PARADO / AO VIVO) liga o movimento quando você quiser mostrar
+mensagens chegando. Isso deixa a tela estável para gravar vídeo ou apresentar
+com calma.
+
 ## 1. Painel do atendente (inbox unificado)
 
 | Recurso | Onde está |
