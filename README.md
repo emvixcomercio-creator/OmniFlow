@@ -29,20 +29,27 @@ com a senha `123456`. A sessão fica no navegador (`omniflow.session`) e o botã
 > A senha do seed é um SHA-256 simples, adequado só para demonstração.
 > Troque por bcrypt ou argon2 e emita um JWT antes de qualquer uso real.
 
-## 0b. Duas portas de entrada
+## 0b. Três portas de entrada
 
-Depois de entrar, a pessoa escolhe (`src/pages/WelcomeChoice.jsx`):
+A primeira tela (`src/pages/WelcomeChoice.jsx`) não pede senha — a pessoa escolhe:
 
-- **Ver a apresentação** — abre o guia passo a passo (11 paradas) explicando o
-  caminho de um atendimento em linguagem simples. O guia destaca a parte da tela
-  que está sendo explicada, mas **não bloqueia os cliques**: dá para mexer no
-  sistema enquanto lê. Sai com Esc ou no botão Sair.
-- **Entrar no sistema** — nada por cima da tela, uso livre.
+| Porta | O que faz |
+|---|---|
+| **Assistir ao fluxo** | Apresentação guiada sobre o sistema já montado, mostrando cada parte da tela (`paradasFluxo.js`, 12 paradas) |
+| **Usar o sistema** | Entra direto, sem nada por cima, com dados de exemplo para explorar |
+| **Ver o primeiro dia** | Começa **vazio** — sem canais, setores, equipe ou conversas — e vai montando tudo até a primeira mensagem de cliente chegar, ser triada, atendida, transferida e encerrada (`paradas.js`, 16 paradas) |
+
+As duas guiadas usam a mesma engine (`Apresentacao.jsx`): a narração fica numa
+faixa no rodapé que **não cobre nem bloqueia a tela** — dá para clicar em
+qualquer coisa enquanto lê. Esc ou "Sair" encerram; o botão GUIA na barra
+lateral rechama.
+
+O login da equipe continua existindo (`LoginPage.jsx`), acessível pelo link
+"Ver a tela de login da equipe" na primeira tela.
 
 **Nada se move sozinho.** A simulação de tempo real começa desligada; o botão
 na barra lateral (PARADO / AO VIVO) liga o movimento quando você quiser mostrar
-mensagens chegando. Isso deixa a tela estável para gravar vídeo ou apresentar
-com calma.
+mensagens chegando.
 
 ## 1. Painel do atendente (inbox unificado)
 
