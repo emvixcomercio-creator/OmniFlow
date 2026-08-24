@@ -122,13 +122,14 @@ export const PARADAS_PRIMEIRO_DIA = [
     },
   },
   {
-    titulo: 'O que o dono da empresa vê',
-    texto: 'Do outro lado existe a visão de quem gerencia: quanto tempo as pessoas esperam, quantas estão na fila agora, quantas conversas cada atendente tem na mão e por qual canal o movimento está vindo.',
+    titulo: 'Algumas semanas depois',
+    texto: 'Vamos adiantar o relógio. Com a operação rodando há um tempo, o atendimento da Renata virou apenas mais um no meio de muitos — e aí aparece a visão de quem gerencia: quanto tempo as pessoas esperam, quantas estão na fila agora, quantas conversas cada atendente tem na mão e por qual canal o movimento está vindo.',
     aba: 'supervisor',
-    act: ({ dispatch }) => patch(dispatch, {
+    act: ({ dispatch, state }) => patch(dispatch, {
       currentUserId: 'u-sup',
       view: 'supervisor',
-      tickets: seed.tickets,
+      // mantém a conversa que acabamos de acompanhar, agora no meio das outras
+      tickets: [...state.tickets, ...seed.tickets],
       contacts: [CLIENTE, ...seed.contacts],
     }),
   },
