@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body { @apply bg-slate-100 text-slate-800 antialiased; }
+}
+
+@layer components {
+  .scroll-thin { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+  .scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+  .scroll-thin::-webkit-scrollbar-thumb { @apply bg-slate-300 rounded-full; }
+  .scroll-thin::-webkit-scrollbar-thumb:hover { @apply bg-slate-400; }
+  .scroll-thin::-webkit-scrollbar-track { background: transparent; }
+
+  .card { @apply bg-white border border-slate-200 rounded-xl; }
+  .chip { @apply inline-flex items-center gap-1 rounded-full text-[11px] font-medium px-2 py-0.5; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none; }
+  .btn-primary { @apply btn bg-brand-600 text-white hover:bg-brand-700 px-3.5 py-2; }
+  .btn-ghost { @apply btn text-slate-600 hover:bg-slate-100 px-3 py-2; }
+  .btn-outline { @apply btn border border-slate-300 text-slate-700 hover:bg-slate-50 px-3 py-2; }
+  .input { @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100; }
+  .chat-bg {
+    background-color: #f1f5f9;
+    background-image: radial-gradient(circle at 1px 1px, rgba(100,116,139,.14) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
+}
